@@ -27,9 +27,9 @@
 #_catch_mult: 0=no; 1=yes
 #_rows are fleets
 #_fleet_type fishery_timing area catch_units need_catch_mult fleetname
- 1 1 1 1 0 LGL  # 1
- 1 1 1 1 0 TWL  # 2
- 3 1 1 2 0 SURV  # 3
+ 1 -1 1 1 0 LGL  # 1
+ 1 -1 1 1 0 TWL  # 2
+ 3 1 1 1 0 SURV  # 3
 #Bycatch_fleet_input_goes_next
 #a:  fleet index
 #b:  1=include dead bycatch in total dead catch for F0.1 and MSY optimizations and forecast ABC; 2=omit from total catch for these purposes (but still include the mortality)
@@ -188,9 +188,9 @@
 -9999 0 0 0 0
 #
  #_CPUE_and_surveyabundance_observations
- #_Units:  0=numbers; 1=biomass; 2=F; 30=spawnbio; 31=recdev; 32=spawnbio*recdev; 33=recruitment; 34=depletion(&see Qsetup); 35=parm_dev(&see Qsetup)
- #_Errtype:  -1=normal; 0=lognormal; >0=T
- #_SD_Report: 0=no sdreport; 1=enable sdreport
+#_Units:  0=numbers; 1=biomass; 2=F; 30=spawnbio; 31=recdev; 32=spawnbio*recdev; 33=recruitment; 34=depletion(&see Qsetup); 35=parm_dev(&see Qsetup)
+#_Errtype:  -1=normal; 0=lognormal; >0=T
+#_SD_Report: 0=no sdreport; 1=enable sdreport
 #_Fleet Units Errtype SD_Report
 1 1 0 0 # LGL
 2 1 0 0 # TWL
