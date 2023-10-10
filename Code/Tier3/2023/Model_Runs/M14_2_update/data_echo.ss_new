@@ -5,12 +5,12 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-stock-synthesis/stock-synthesis
 
-#_Start_time: Tue Oct 10 10:07:07 2023
+#_Start_time: Tue Oct 10 13:17:38 2023
 #_echo_input_data
 #C data file for model 14.2 run in October 2020 (i.e. 14.2 with new data thru 2020)
 #V3.30.21.00;_safe;_compile_date:_Feb 10 2023;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.1
 1950 #_StartYr
-2020 #_EndYr
+2023 #_EndYr
 1 #_Nseas
  12 #_months/season
 2 #_Nsubseasons (even number, minimum is 2)
@@ -112,6 +112,9 @@
 2018 1 1 19256 0.01
 2019 1 1 9524 0.01
 2020 1 1 10541 0.01
+2021 1 1 10751 0.01
+2022 1 1 20181 0.01
+2023 1 1 14467 0.01
 -999 1 2 0 0.01
 1950 1 2 0 0.01
 1951 1 2 0 0.01
@@ -184,6 +187,9 @@
 2018 1 2 4313 0.01
 2019 1 2 5606 0.01
 2020 1 2 4238 0.01
+2021 1 2 5566 0.01
+2022 1 2 4818 0.01
+2023 1 2 2960 0.01
 -9999 0 0 0 0
 #
 #_CPUE_and_surveyabundance_and_index_observations
@@ -233,9 +239,9 @@
 2017 7 3 545059 0.071 #_ SURV
 2018 7 3 546263 0.048 #_ SURV
 2019 7 3 490420 0.048 #_ SURV
-2021 7 -3 468113 0.048 #_ SURV
-2022 7 -3 463017 0.056 #_ SURV
-2023 7 -3 418483 0.08 #_ SURV
+2021 7 3 468113 0.048 #_ SURV
+2022 7 3 463017 0.056 #_ SURV
+2023 7 3 418483 0.08 #_ SURV
 -9999 1 1 1 1 # terminator for survey observations 
 #
 0 #_N_fleets_with_discard
