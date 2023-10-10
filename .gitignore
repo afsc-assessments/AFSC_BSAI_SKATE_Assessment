@@ -1,0 +1,51 @@
+# R projects
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rproj
+
+# usernames and passwords for db connections
+database.csv
+
+# confidential fishery dependent data
+*confidential*
+
+# old assessment archive
+*archive*
+
+# folders
+Data/
+Documents/
+Outside_Analyses/
+EXTRAS/
+
+# large files
+*RACE_CATCH*
+*RACE_HAUL*
+*IPHC_FISS_survey*
+*IPHC_FISS_raw*
+*trackoff*
+
+# Don't track data
+*.xlsx
+*.xlsm
+*.docx
+*.pptx
+*.Rdata
+
+# Don't track binary or fig files
+*.docx
+*.pptx
+*.png
+*.pdf
+*.png
+
+# ignore shape files
+shapefiles
+
+# ignore zip files
+*.zip
+
+# Windows thumbnail cache files
+Thumbs.db
