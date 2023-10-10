@@ -41,9 +41,8 @@ EXTRAS/
 # Don't track binary or fig files
 *.docx
 *.pptx
-*.png
 *.pdf
-*.png
+
 
 # ignore shape files
 shapefiles
