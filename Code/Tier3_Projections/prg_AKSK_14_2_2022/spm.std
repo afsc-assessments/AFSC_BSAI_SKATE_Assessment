@@ -1,0 +1,6 @@
+ index   name       value      std.dev
+     1   log_Rzero  1.3000e+01 2.7140e-04
+     2   steepness  9.9522e-01 3.3560e-04
+     3   sigr       3.3444e-01 4.4311e-02
+     4   dummy      0.0000e+00 7.0711e-01
+     5   Bzero      2.6746e+06 7.2589e+02
