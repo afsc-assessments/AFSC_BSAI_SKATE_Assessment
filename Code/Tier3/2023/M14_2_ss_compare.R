@@ -15,12 +15,12 @@ model_run_old1 <- r4ss::SS_output(dir = model_dir_old1,
                                  printstats = TRUE)
 
 model_dir_old2 <- here::here(datapath, Model_name_old2)
-model_run_old2 <- r4ss::SS_output(dir = model_dir_old2,
+model_run_old2 <- r4ss::SS_output(dir = model_dir_old2, #does not work
                                  verbose = TRUE,
                                  printstats = TRUE)
 
 model_dir_new <- here::here(datapath, Model_name_new)
-model_run_new <- r4ss::SS_output(dir = model_dir_new,
+model_run_new <- r4ss::SS_output(dir = model_dir_new, #does not work
                                   verbose = TRUE,
                                   printstats = TRUE)
 
