@@ -1,0 +1,61 @@
+
+Initial statistics: 2 variables; iteration 0; function evaluation 0; phase 1
+Function value 9.1579927e+02; maximum gradient component mag -2.3319e+01
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.49947 -2.33192e+01 |  2  0.00000  0.00000e+00 |
+
+ - final statistics:
+2 variables; iteration 7; function evaluation 9
+Function value 9.1304e+02; maximum gradient component mag -3.5276e-03
+Exit code = 1;  converg criter 1.0000e-01
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99950 -3.52761e-03 |  2  0.00000  0.00000e+00 |
+
+Initial statistics: 3 variables; iteration 0; function evaluation 0; phase 2
+Function value 9.1708828e+02; maximum gradient component mag -1.4030e+03
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99950 -3.52761e-03 |  2  0.29715 -1.40300e+03 |  3  0.00000  0.00000e+00
+  ic > imax  in fminim is answer attained ?
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99991  6.80957e-04 |  2  0.90098 -1.52756e-01 |  3  0.00000  0.00000e+00
+Function minimizer not making progress ... is minimum attained?
+Minimprove criterion = 0.0000e+00
+
+ - final statistics:
+3 variables; iteration 9; function evaluation 49
+Function value 1.0086e+02; maximum gradient component mag -1.5276e-01
+Exit code = 1;  converg criter 1.0000e-02
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99991  6.80957e-04 |  2  0.90098 -1.52756e-01 |  3  0.00000  0.00000e+00
+
+Initial statistics: 4 variables; iteration 0; function evaluation 0; phase 3
+Function value 1.0086022e+02; maximum gradient component mag 3.2276e+01
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99991  6.80982e-04 |  2  0.90098 -1.53331e-01 |  3 -0.28197  3.22760e+01
+  4  0.00000  0.00000e+00 |
+  ic > imax  in fminim is answer attained ?
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99991  8.16661e-04 |  2  0.90149 -3.61447e-02 |  3 -0.46321  8.38160e-04
+  4  0.00000  0.00000e+00 |
+Function minimizer not making progress ... is minimum attained?
+Minimprove criterion = 0.0000e+00
+Warning: the following parameters had issues
+  log_Rzero[1] is within 0.1% of upper bound: 0.0000e+00 < 1.3000e+01 < 1.3000e+01
+  steepness[1] is within 1% of upper bound: 2.0000e-01 < 9.9522e-01 < 1.0000e+00
+
+
+ - final statistics:
+4 variables; iteration 9; function evaluation 45
+Function value 9.7209e+01; maximum gradient component mag -3.6145e-02
+Exit code = 1;  converg criter 1.0000e-05
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99991  8.16661e-04 |  2  0.90149 -3.61447e-02 |  3 -0.46321  8.38160e-04
+  4  0.00000  0.00000e+00 |
+Estimating row 1 out of 4 for hessian
+Estimating row 2 out of 4 for hessian
+Estimating row 3 out of 4 for hessian
+Estimating row 4 out of 4 for hessian
+size of file gradfil1.tmp = 0
+size of file gradfil2.tmp = 0
+size of file varssave.tmp = 0
+size of file cmpdiff.tmp = 0
