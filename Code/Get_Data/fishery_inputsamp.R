@@ -1,12 +1,9 @@
 SELECT
 norpac.debriefed_length_mv.year,
 norpac.debriefed_length_mv.fmp_gear,
-round(
-  sqrt(
-    COUNT(DISTINCT norpac.debriefed_length_mv.haul_join)
-  ), 1
-)                                                    AS "Nsamp",
-COUNT(DISTINCT norpac.debriefed_length_mv.haul_join) AS "Hauls"
+round(sqrt(COUNT(DISTINCT norpac.debriefed_length_mv.haul_join)), 1) AS "Nsamp",
+COUNT(DISTINCT norpac.debriefed_length_mv.haul_join) AS "Hauls",
+SUM(norpac.debriefed_length_mv.frequency) AS "Lengths"
 FROM
 norpac.debriefed_length_mv
 WHERE

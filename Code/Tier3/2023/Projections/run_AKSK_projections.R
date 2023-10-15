@@ -45,6 +45,10 @@ catchvec <- as.data.frame(catchvec)
 
 save(catchvec, file = paste0(getwd(), "/Code/Tier3/", AYR, "/Projections/", Sys.Date(), "-catches_for_proj.rdata"))
 
+####
+# test codes from other examples, not run----
+# saved for future developments
+
 # Code to produce results 
 #theme_set(afscassess::theme_report())
 #lapply(list.files("C:/Users/maia.kapur/Work/assessments/proj_functions/", full.names = T, pattern = ".r$"),  source)
@@ -52,27 +56,27 @@ save(catchvec, file = paste0(getwd(), "/Code/Tier3/", AYR, "/Projections/", Sys.
 #file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/tacpar.dat', here('projection'), overwrite = TRUE)
 
 # Write proj files ----
-mod_2023_dir <- paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs/M14_2_update")
-mod_2023<- SS_output(mod_2023_dir, verbose = F)
+#mod_2023_dir <- paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs/M14_2_update")
+#mod_2023<- SS_output(mod_2023_dir, verbose = F)
 ## passed to write_proj function
-NSEX=1						# number of sexes used in assessment model
-Nfishery=2					# number of fisheries(fleets) #This was set equal to 2
-fleets=2					# fleet index number (associated with commercial fishery)
-rec_age=0					# assumed age at recruitment
-max_age=25					# maximum age in model
-NAGE=length(rec_age:max_age)			# number of ages
-FY=1964 					# first year used to subset SSB, per memo this is always 1977, 1964 for consistency
-rec_FY=1964					# first year used to subset recruitment
-rec_LY_decrement=0				# value subtracted from assessment final year to subset recruitment vector
-spawn_month=6					# spawning month
-Fratios=1            				# Proportion F per fishery
+#NSEX=1						# number of sexes used in assessment model
+#Nfishery=2					# number of fisheries(fleets) #This was set equal to 2
+#fleets=2					# fleet index number (associated with commercial fishery)
+#rec_age=0					# assumed age at recruitment
+#max_age=25					# maximum age in model
+#NAGE=length(rec_age:max_age)			# number of ages
+#FY=1964 					# first year used to subset SSB, per memo this is always 1977, 1964 for consistency
+#rec_FY=1964					# first year used to subset recruitment
+#rec_LY_decrement=0				# value subtracted from assessment final year to subset recruitment vector
+#spawn_month=6					# spawning month
+#Fratios=1            				# Proportion F per fishery
 #passed to write_proj_spcat
-ct_yrs=4			#Number of future catch years given to projection model
+#ct_yrs=4			#Number of future catch years given to projection model
 ## passed to setup function
-nsims=1000			# number of projection model simulations
-nproj=14			# number of projection years ALSO USED BY get_proj_res
+#nsims=1000			# number of projection model simulations
+#nproj=14			# number of projection years ALSO USED BY get_proj_res
 ## passed to get_proj_res
-spp="BSAI_Alaskaskate"
+#spp="BSAI_Alaskaskate"
 
 #file.copy(from = here('projection','2021_projections','model_proj.dat'),
 #          to = here('projection'), overwrite = T)
@@ -103,8 +107,12 @@ spp="BSAI_Alaskaskate"
 
 
 ## Execute proj module ----
-## once spp_catch is set up you can run the projection module
-setwd(paste0(getwd(), "/Code/Tier3/", AYR, "/Projections")) 
+# test out Ormseth's previous version for constency
+setwd(paste0(getwd(), "/Code/Tier3/", AYR, "/Projections/prg_AKSK_14_2_2020")) 
+shell('main')
+
+## copy over Ormseth's work and update files
+setwd(paste0(getwd(), "/Code/Tier3/", AYR, "/Projections/prg_AKSK_14_2_2023")) 
 shell('main')
 
 

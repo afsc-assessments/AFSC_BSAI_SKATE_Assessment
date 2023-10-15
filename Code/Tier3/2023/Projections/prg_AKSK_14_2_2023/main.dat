@@ -1,5 +1,5 @@
 EBS_SKATE																											
-0	#	SSL	Species???																								
+1	#	SSL	Species???																								
 0	#Constant	buffer	of	Dorn?																							
 2	#Number	of	fisheries?																								
 1	#Number	of	sexes?																								
@@ -9,7 +9,7 @@ EBS_SKATE
 0.35	#MSY	SPR																									
 6	#_Spawn_month																										
 26	#_Number_of_ages																										
-0.824	0.176#_Relative_F_By_Fishery																									
+0.75	#_Relative_F_By_Fishery																									
 #																											
 #_Natural_Mortality																											
 #0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25		
