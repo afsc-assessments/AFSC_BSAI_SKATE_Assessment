@@ -1,6 +1,6 @@
 # BSAI Skate Update Assessment  ----
 # Updated Sept 26 2023 by C. Tribuzio
-#use this code to work through each step and run all of the other codes
+# not completed for 2023 assessment, roadmap for future
 
 # Setup ----
 libs <- c("tidyverse", "janitor", "Hmisc", "RColorBrewer", "gridExtra", "gtable", 

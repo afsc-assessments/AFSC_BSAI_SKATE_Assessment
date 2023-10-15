@@ -56,8 +56,8 @@ save(catchvec, file = paste0(getwd(), "/Code/Tier3/", AYR, "/Projections/", Sys.
 #file.copy('C:/Users/maia.kapur/Work/assessments/proj_functions/tacpar.dat', here('projection'), overwrite = TRUE)
 
 # Write proj files ----
-#mod_2023_dir <- paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs/M14_2_update")
-#mod_2023<- SS_output(mod_2023_dir, verbose = F)
+mod_2023_dir <- paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs/M14_2_update")
+mod_2023<- SS_output(mod_2023_dir, verbose = F)
 ## passed to write_proj function
 #NSEX=1						# number of sexes used in assessment model
 #Nfishery=2					# number of fisheries(fleets) #This was set equal to 2
@@ -145,12 +145,12 @@ rec_table <- bind_rows(rec_table1, rec_table2)
 rec_table <-rec_table[c(11,6,3,4,5,2,1,1,9,8,8),] 
 
 # rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
-write.csv(rec_table, file = here::here('projection','rec_table.csv'), row.names=FALSE)
+write_csv(rec_table, paste0(getwd(), '/rec_table.csv'))
 
 ## load last year's values and make full safe
-previous_rec_table <- read.csv("C:/Users/maia.kapur/Work/assessments/2022/BSAI-fhs-2022/REC_TABLE.CSV")
+previous_rec_table <- read_csv(paste0(getwd(),'/rec_table_old.csv'))
 
-previous_rec_table[,c('X2023','X2024')] <- apply(previous_rec_table[,c('X2023','X2024')],2,
+previous_rec_table[,c('2023','2024')] <- apply(previous_rec_table[,c('2023','2024')],2,
                                                  FUN = function(x) as.numeric(gsub(",","",x)))
 
 ## correct order error in previous table
@@ -196,15 +196,15 @@ safe01[8:10,] <- sapply(safe01[8:10,],  FUN = function(x) sprintf("%.2f",as.nume
 safe01[c(3:7,11:13),] <- sapply(safe01[c(3:7,11:13),],  FUN = function(x) prettyNum(round(as.numeric(x),0),big.mark=','))
 safe01$item <- rownames(safe01)
 
-safe02 <- safe01%>% select(item, y1 = "X2023", y2 = "X2024", y3 = "2024", y4="2025")
-write.csv(safe02, file = here('tables','safe_table.csv'), row.names=TRUE)
+safe02 <- safe01%>% select(item, y1 = "2023", y2 = "2024", y3 = "2024", y4="2025")
+write.csv(safe02, paste0(getwd(), "/T3_ex_table.csv"))
 
 safe::main_table(data=safe02, year=2023, tier=3, 
                  c1=catchvec[4,2], c2=catchvec[5,2], c3=catchvec[6,2])
 
 save(safe02, file = here::here('tables','safe_table.rdata')) ## this can be used in RMD
 
-
+# Example figure/table codes ----
 # Figures ----
 ggplot2::theme_set(ggsidekick::theme_sleek( base_size = 10))
 theme_replace(text= element_text(family = "roboto condensed", size = 10),
