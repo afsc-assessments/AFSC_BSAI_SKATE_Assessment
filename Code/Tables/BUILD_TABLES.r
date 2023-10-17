@@ -15,22 +15,6 @@ if(length(libs[which(libs %in% rownames(installed.packages()) == FALSE )]) > 0) 
 lapply(libs, library, character.only = TRUE)
 
 
-##<<<<<<< HEAD
-afsc_user  = "sbarb"   ## enter afsc username
-afsc_pwd   = "RedFsh!!1234"    ## enter afsc password
-akfin_user = "sbarbeaux"  ## enter AKFIN username
-akfin_pwd  = "$tockmen12"   ## enter AKFIN password
-
-
-  afsc = DBI::dbConnect(odbc::odbc(), "afsc",
-                      UID = afsc_user, PWD = afsc_pwd)
-  akfin = DBI::dbConnect(odbc::odbc(), "akfin",
-                      UID = akfin_user, PWD = akfin_pwd)
-
-# this assumes that the FUNCTIONS subdirectory is in the working directory
-working_dir <- "C:/WORKING_FOLDER/EBS_PCOD_work_folder/2023_ASSESSMENT"
-
-
 # the most recent year of data to be used
 new_SS_dat_year <- 2023
 final_year <- new_SS_dat_year
