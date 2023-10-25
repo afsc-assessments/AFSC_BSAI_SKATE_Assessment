@@ -113,5 +113,14 @@ F_exploit <- M14_2_out$replist1$exploitation %>%
   select(Yr, Longline, Trawl, Total_F)
 write_csv(F_exploit, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2exploitation_summary.csv"))
 
+NAA <- M14_2_out$replist1$natage %>% 
+  filter(`Beg/Mid` == "B") %>% 
+  select(!c(Era, Area, Bio_Pattern, Sex, BirthSeas, Settlement, Platoon, Morph, Seas, Time, 'Beg/Mid')) %>% 
+  pivot_longer(!Yr, names_to = "Age", values_to = "Numbers") %>% 
+  mutate(Numbers = round(Numbers, 0)) %>% 
+  pivot_wider(names_from = Age, values_from = Numbers)
+write_csv(NAA, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2NAA_summary.csv"))
 
+Lcomp <- M14_2_out$replist1$len_comp_fit_table
 
+# Projection summaries ----
