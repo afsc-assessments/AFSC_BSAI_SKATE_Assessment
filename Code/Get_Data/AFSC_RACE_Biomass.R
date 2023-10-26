@@ -78,6 +78,19 @@ AFSCTWL_slopeBio <- sqlQuery(channel_akfin, query = ("
   rename(biomass_var = bio_var,
          area_biomass = stratum_biomass)
 
+# NBS survey biomass
+AFSCTWL_NBSBio <- sqlQuery(channel_akfin, query = ("
+                select    *
+                from      afsc.race_biomass_nbs
+                where     species_code between 400 and 500")) %>% #not sure why this query won't work, works in SQLs
+  clean_names() %>% 
+  filter(stratum == 999999,
+         year >= 2002) %>% 
+  select(c("survey", 'year', 'species_code', 'haul_count', 'catch_count', 'stratum_biomass', 'bio_var')) %>% 
+  mutate(regulatory_area_name = "EBS") %>% 
+  rename(biomass_var = bio_var,
+         area_biomass = stratum_biomass)
+
 # Clean up and add CIs and CVs ----
 AFSCTWL_BIOM <- AFSCTWL_AIBio %>% bind_rows(AFSCTWL_shelfBio, AFSCTWL_slopeBio) %>% 
   mutate(cv = sqrt(biomass_var)/area_biomass,
