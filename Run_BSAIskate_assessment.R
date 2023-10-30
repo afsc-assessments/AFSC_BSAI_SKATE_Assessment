@@ -5,7 +5,7 @@
 # Setup ----
 libs <- c("tidyverse", "janitor", "Hmisc", "RColorBrewer", "gridExtra", "gtable", 
           "grid", "flextable", "officer", "lubridate", "RODBC", "DBI", "gtable", 
-          "patchwork", 'cowplot', 'rema', 'r4ss')
+          "patchwork", 'cowplot', 'rema', 'r4ss', 'viridis')
 if(length(libs[which(libs %in% rownames(installed.packages()) == FALSE )]) > 0) {
   install.packages(libs[which(libs %in% rownames(installed.packages()) == FALSE)])}
 lapply(libs, library, character.only = TRUE)

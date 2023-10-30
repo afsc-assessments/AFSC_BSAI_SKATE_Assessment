@@ -1,4 +1,4 @@
-datapath <- paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs")
+datapath <- paste0(getwd(), "/", AYR, "/Tier 3/Model_Runs")
 
 # Current model name
 Model_name_old1 <- "M14_2_vold"

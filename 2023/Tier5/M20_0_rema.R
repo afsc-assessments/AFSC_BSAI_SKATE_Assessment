@@ -3,7 +3,7 @@
 # set up ----
 # folder set up
 dat_path <- paste0("DATA/", AYR); dir.create(dat_path)
-out_path <- paste0(getwd(), "/OUTPUT/", AYR, "/Tier5"); dir.create(out_path)
+out_path <- paste0(getwd(), "/", AYR, "/Tier5/Output"); dir.create(out_path)
 
 ggplot2::theme_set(cowplot::theme_cowplot(font_size = 13) +
                      cowplot::background_grid() +
@@ -121,17 +121,17 @@ Slope_dat <- biomass_dat %>%
   select(strata, year, biomass, cv)
 
 # prep data for rema  ----
-EBS_input <- prepare_rema_input(model_name = 'M20_EBSshelf',
+EBS_input <- prepare_rema_input(model_name = 'M23_EBSshelf',
                             biomass_dat = EBS_dat,
                             end_year = pYEAR,
                             zeros = list(assumption = "NA"),
                             PE_options = list(pointer_PE_biomass = c(1)))
-AI_input <- prepare_rema_input(model_name = 'M20_AI',
+AI_input <- prepare_rema_input(model_name = 'M23_AI',
                                 biomass_dat = AI_dat,
                                 end_year = pYEAR,
                                 zeros = list(assumption = "NA"),
                                 PE_options = list(pointer_PE_biomass = c(1)))
-Slope_input <- prepare_rema_input(model_name = 'M20_EBSslope',
+Slope_input <- prepare_rema_input(model_name = 'M23_EBSslope',
                                 biomass_dat = Slope_dat,
                                 end_year = pYEAR,
                                 zeros = list(assumption = "NA"),
@@ -169,7 +169,7 @@ write_csv(T5_m20_output, paste0(out_path, "/Tier5_m20_output.csv"))
 # make nice summary graph ----
 T5_m20_output <- read_csv(paste0(out_path, "/Tier5_m20_output.csv"))
 
-ggplot(data = T5_m20_output,
+plot_M23 <- ggplot(data = T5_m20_output,
        aes(x = year, y = pred,
            col = model_name)) +
   geom_ribbon(aes(ymin = pred_lci, ymax = pred_uci,
@@ -184,6 +184,9 @@ ggplot(data = T5_m20_output,
        fill = NULL, colour = NULL, shape = NULL) +
   ggplot2::scale_fill_viridis_d(direction = 1) +
   ggplot2::scale_colour_viridis_d(direction = 1)
+
+ggsave(path = paste0(getwd(), "/", AYR, "/Tier5"),
+       "M23_biomass.png",plot=plot_M23,dpi=600,width = 6, height = 8)
 
 # Tier 5 harvest recommendations ----
 SurvBiom <- T5_m20_output %>% 
