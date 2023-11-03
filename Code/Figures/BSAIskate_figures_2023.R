@@ -181,6 +181,29 @@ setwd("C:/Users/cindy.Tribuzio/Work/SAFE/Assessments/AFSC_BSAI_SKATE_Assessment"
 
 model_comp <- r4ss::SSsummarize(bridge_out)
 
+brg_SSBUL <- model_comp$SpawnBioUpper %>% 
+  filter(Yr <= AYR) %>% 
+  mutate(replist2 = if_else(Yr > 2020, NA, replist2),
+         replist3 = if_else(Yr > 2020, NA, replist3)) %>% 
+  rename(M14.2 = replist1,
+         M14.2a = replist2,
+         M14.2b = replist3,
+         M14.2c = replist4,
+         M14.2d = replist5) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Model', values_to = 'SSBUL')
+brg_SSBLL <- model_comp$SpawnBioLower %>% 
+  filter(Yr <= AYR) %>% 
+  mutate(replist2 = if_else(Yr > 2020, NA, replist2),
+         replist3 = if_else(Yr > 2020, NA, replist3)) %>% 
+  rename(M14.2 = replist1,
+         M14.2a = replist2,
+         M14.2b = replist3,
+         M14.2c = replist4,
+         M14.2d = replist5) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Model', values_to = 'SSBLL')
+
 brg_SSB <- model_comp$SpawnBio %>% 
   filter(Yr <= AYR) %>% 
   mutate(replist2 = if_else(Yr > 2020, NA, replist2),
@@ -191,10 +214,15 @@ brg_SSB <- model_comp$SpawnBio %>%
          M14.2c = replist4,
          M14.2d = replist5) %>% 
   select(!Label) %>% 
-  pivot_longer(!Yr, names_to = 'Model', values_to = 'SSB')
+  pivot_longer(!Yr, names_to = 'Model', values_to = 'SSB') %>% 
+  left_join(brg_SSBLL) %>% 
+  left_join(brg_SSBUL)
 
 bcolors <- viridis(n=5)
-plot_bridgebase <- ggplot(brg_SSB[brg_SSB$Model == "M14.2",], aes(x = Yr, y = SSB/1000, color = Model))+
+plot_bridgebase <- ggplot(brg_SSB[brg_SSB$Model == "M14.2",], 
+                          aes(x = Yr, y = SSB/1000, color = Model))+
+  geom_ribbon(aes(ymin = SSBLL/1000, ymax = SSBUL/1000), 
+              show.legend = F, fill = "grey70", alpha = 0.5, color = NA)+
   geom_line()+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
@@ -209,7 +237,10 @@ plot_bridgebase <- ggplot(brg_SSB[brg_SSB$Model == "M14.2",], aes(x = Yr, y = SS
 ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
        "Bridge_14_2.png",plot=plot_bridgebase,dpi=600,width = 6, height = 4)
 
-plot_bridgea <- ggplot(brg_SSB[brg_SSB$Model == "M14.2a",], aes(x = Yr, y = SSB/1000, color = Model))+
+plot_bridgea <- ggplot(brg_SSB[brg_SSB$Model == "M14.2a",], 
+                       aes(x = Yr, y = SSB/1000, color = Model))+
+  geom_ribbon(aes(ymin = SSBLL/1000, ymax = SSBUL/1000), 
+              show.legend = F, fill = "grey70", alpha = 0.5, color = NA)+
   geom_line()+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
@@ -225,6 +256,8 @@ ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
        "Bridge_14_2a.png",plot=plot_bridgea,dpi=600,width = 6, height = 4)
 
 plot_bridgeb <- ggplot(brg_SSB[brg_SSB$Model == "M14.2b",], aes(x = Yr, y = SSB/1000, color = Model))+
+  geom_ribbon(aes(ymin = SSBLL/1000, ymax = SSBUL/1000), 
+              show.legend = F, fill = "grey70", alpha = 0.5, color = NA)+
   geom_line()+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
@@ -240,6 +273,8 @@ ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
        "Bridge_14_2b.png",plot=plot_bridgeb,dpi=600,width = 6, height = 4)
 
 plot_bridgec <- ggplot(brg_SSB[brg_SSB$Model == "M14.2c",], aes(x = Yr, y = SSB/1000, color = Model))+
+  geom_ribbon(aes(ymin = SSBLL/1000, ymax = SSBUL/1000), 
+              show.legend = F, fill = "grey70", alpha = 0.5, color = NA)+
   geom_line()+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
@@ -254,7 +289,9 @@ plot_bridgec <- ggplot(brg_SSB[brg_SSB$Model == "M14.2c",], aes(x = Yr, y = SSB/
 ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
        "Bridge_14_2c.png",plot=plot_bridgec,dpi=600,width = 6, height = 4)
 
-plot_bridged <- ggplot(brg_SSB[brg_SSB$Model == "M14.2c",], aes(x = Yr, y = SSB/1000, color = Model))+
+plot_bridged <- ggplot(brg_SSB[brg_SSB$Model == "M14.2d",], aes(x = Yr, y = SSB/1000, color = Model))+
+  geom_ribbon(aes(ymin = SSBLL/1000, ymax = SSBUL/1000), 
+              show.legend = F, fill = "grey70", alpha = 0.5, color = NA)+
   geom_line()+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
@@ -269,8 +306,14 @@ plot_bridged <- ggplot(brg_SSB[brg_SSB$Model == "M14.2c",], aes(x = Yr, y = SSB/
 ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
        "Bridge_14_2d.png",plot=plot_bridged,dpi=600,width = 6, height = 4)
 
-plot_bridge <- ggplot(brg_SSB, aes(x = Yr, y = SSB/1000, color = Model))+
+brg_SSB2 <- brg_SSB %>% 
+  mutate(SSB = SSB/1000,
+         SSBUL = SSBUL/1000,
+         SSBLL = SSBLL/1000)
+plot_bridge <- ggplot(as.data.frame(brg_SSB2), aes(x = Yr, y = SSB, color = Model))+
   geom_line()+
+  geom_ribbon(aes(x = Yr, ymin = SSBLL, ymax = SSBUL, fill = Model), 
+              show.legend = F, fill = "grey70", alpha = 0.1, linetype = 0)+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
   scale_color_viridis(discrete = T) +
@@ -283,6 +326,7 @@ plot_bridge <- ggplot(brg_SSB, aes(x = Yr, y = SSB/1000, color = Model))+
   guides(fill = guide_legend(byrow = TRUE))
 ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
        "Bridge_all.png",plot=plot_bridge,dpi=600,width = 6, height = 4)
+
 # retrospective plots----
 setwd(paste0(getwd(), "/", AYR, "/Tier3/Retrospective/M14_2_update/retrospectives"))
 Models1 <- SSgetoutput(dirvec = c("retro0", "retro-1", "retro-2", 'retro-3', 'retro-4', 'retro-5', 'retro-6',
@@ -292,14 +336,50 @@ setwd("C:/Users/cindy.Tribuzio/Work/SAFE/Assessments/AFSC_BSAI_SKATE_Assessment"
 Models1_SS <- SSsummarize(Models1)
 endyrvec <-Models1_SS$endyrs + 0:-12
 
+#SSB
 baserun <- Models1_SS$SpawnBio %>% 
   filter(Yr <= AYR) %>% 
-  rename(M14_2 = replist1) %>% 
-  select(M14_2, Yr)
+  rename(M14_2d = replist1) %>% 
+  select(M14_2d, Yr)
+
+retrobioLL <- Models1_SS$SpawnBioLower %>% 
+  filter(Yr <= AYR) %>% 
+  rename(M14_2d = replist1,
+         run2022 = replist2,
+         run2021 = replist3,
+         run2020 = replist4,
+         run2019 = replist5,
+         run2018 = replist6,
+         run2017 = replist7,
+         run2016 = replist8,
+         run2015 = replist9,
+         run2014 = replist10,
+         run2013 = replist11,
+         run2012 = replist12,
+         run2011 = replist13) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Peel', values_to = 'Peel_SSBLL')
+retrobioUL <- Models1_SS$SpawnBioUpper %>% 
+  filter(Yr <= AYR) %>% 
+  rename(M14_2d = replist1,
+         run2022 = replist2,
+         run2021 = replist3,
+         run2020 = replist4,
+         run2019 = replist5,
+         run2018 = replist6,
+         run2017 = replist7,
+         run2016 = replist8,
+         run2015 = replist9,
+         run2014 = replist10,
+         run2013 = replist11,
+         run2012 = replist12,
+         run2011 = replist13) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Peel', values_to = 'Peel_SSBUL')
 
 retrobio <- Models1_SS$SpawnBio %>% 
   filter(Yr <= AYR) %>% 
-  rename(M14_2 = replist1,
+  rename(M14_2d = replist1,
          run2022 = replist2,
          run2021 = replist3,
          run2020 = replist4,
@@ -315,7 +395,9 @@ retrobio <- Models1_SS$SpawnBio %>%
   select(!Label) %>% 
   pivot_longer(!Yr, names_to = 'Peel', values_to = 'Peel_SSB') %>% 
   left_join(baserun) %>% 
-  mutate(Peel_diff = (Peel_SSB-M14_2)/M14_2)
+  mutate(Peel_diff = (Peel_SSB-M14_2d)/M14_2d) %>% 
+  left_join(retrobioLL) %>% 
+  left_join(retrobioUL)
 
 models <- unique(retrobio$Peel)
 
@@ -327,10 +409,167 @@ for (iline in 1:length(endyrvec)) {
   endyr <- endyrvec[iline]
   imodel <- models[iline]
   retrobio[retrobio$Peel == imodel & retrobio$Yr > endyr,]$Peel_diff <- NA}
+for (iline in 1:length(endyrvec)) {
+  endyr <- endyrvec[iline]
+  imodel <- models[iline]
+  retrobio[retrobio$Peel == imodel & retrobio$Yr > endyr,]$Peel_SSBLL <- NA}
+for (iline in 1:length(endyrvec)) {
+  endyr <- endyrvec[iline]
+  imodel <- models[iline]
+  retrobio[retrobio$Peel == imodel & retrobio$Yr > endyr,]$Peel_SSBUL <- NA}
 
+#recruits
+baserun_rec <- Models1_SS$recruits %>% 
+  filter(Yr <= AYR) %>% 
+  rename(M14_2d = replist1) %>% 
+  select(M14_2d, Yr)
+
+retrorecLL <- Models1_SS$recruitsLower %>% 
+  filter(Yr <= AYR) %>% 
+  rename(M14_2d = replist1,
+         run2022 = replist2,
+         run2021 = replist3,
+         run2020 = replist4,
+         run2019 = replist5,
+         run2018 = replist6,
+         run2017 = replist7,
+         run2016 = replist8,
+         run2015 = replist9,
+         run2014 = replist10,
+         run2013 = replist11,
+         run2012 = replist12,
+         run2011 = replist13) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Peel', values_to = 'Peel_recLL')
+retrorecUL <- Models1_SS$recruitsUpper %>% 
+  filter(Yr <= AYR) %>% 
+  rename(M14_2d = replist1,
+         run2022 = replist2,
+         run2021 = replist3,
+         run2020 = replist4,
+         run2019 = replist5,
+         run2018 = replist6,
+         run2017 = replist7,
+         run2016 = replist8,
+         run2015 = replist9,
+         run2014 = replist10,
+         run2013 = replist11,
+         run2012 = replist12,
+         run2011 = replist13) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Peel', values_to = 'Peel_recUL')
+
+retrorec <- Models1_SS$recruits %>% 
+  filter(Yr <= AYR) %>% 
+  rename(M14_2d = replist1,
+         run2022 = replist2,
+         run2021 = replist3,
+         run2020 = replist4,
+         run2019 = replist5,
+         run2018 = replist6,
+         run2017 = replist7,
+         run2016 = replist8,
+         run2015 = replist9,
+         run2014 = replist10,
+         run2013 = replist11,
+         run2012 = replist12,
+         run2011 = replist13) %>% 
+  select(!Label) %>% 
+  pivot_longer(!Yr, names_to = 'Peel', values_to = 'Peel_rec') %>% 
+  left_join(baserun) %>% 
+  mutate(Peel_diff = (Peel_rec-M14_2d)/M14_2d) %>% 
+  left_join(retrorecLL) %>% 
+  left_join(retrorecUL)
+
+models <- unique(retrorec$Peel)
+
+for (iline in 1:length(endyrvec)) {
+  endyr <- endyrvec[iline]
+  imodel <- models[iline]
+  retrorec[retrorec$Peel == imodel & retrorec$Yr > endyr,]$Peel_rec <- NA}
+for (iline in 1:length(endyrvec)) {
+  endyr <- endyrvec[iline]
+  imodel <- models[iline]
+  retrorec[retrorec$Peel == imodel & retrorec$Yr > endyr,]$Peel_diff <- NA}
+for (iline in 1:length(endyrvec)) {
+  endyr <- endyrvec[iline]
+  imodel <- models[iline]
+  retrorec[retrorec$Peel == imodel & retrorec$Yr > endyr,]$Peel_recLL <- NA}
+for (iline in 1:length(endyrvec)) {
+  endyr <- endyrvec[iline]
+  imodel <- models[iline]
+  retrorec[retrorec$Peel == imodel & retrorec$Yr > endyr,]$Peel_recUL <- NA}
+
+#SSB Plots
 plot_retrossb <- ggplot(retrobio, aes(x = Yr, y = Peel_SSB/1000, color = Peel))+
+  geom_ribbon(aes(x = Yr, ymin = Peel_SSBLL/1000, ymax = Peel_SSBUL/1000, fill = Model), 
+              show.legend = F, fill = "grey70", alpha = 0.1, linetype = 0)+
   geom_line()+
-  labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+
+  labs(y = "Spawning Biomass (1,000s t)", x = "", color = "")+
+  scale_y_continuous(labels = scales::comma_format())+
+  scale_color_viridis(discrete = T) +
+  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  guides(fill = guide_legend(byrow = TRUE))
+plot_retrossb10 <- ggplot(retrobio[retrobio$Yr >= 2013,], aes(x = Yr, y = Peel_SSB/1000, color = Peel))+
+  geom_ribbon(aes(x = Yr, ymin = Peel_SSBLL/1000, ymax = Peel_SSBUL/1000, fill = Model), 
+              show.legend = F, fill = "grey70", alpha = 0.1, linetype = 0)+
+  geom_line()+
+  labs(y = "", x = "", color = "")+
+  scale_y_continuous(labels = scales::comma_format())+
+  scale_x_continuous(breaks =c(2013, 2015, 2017, 2019, 2021, 2023))+
+  scale_color_viridis(discrete = T) +
+  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  guides(fill = guide_legend(byrow = TRUE))
+plot_retrodiff <- ggplot(retrobio, aes(x = Yr, y = Peel_diff, color = Peel))+
+  geom_line()+
+  labs(y = "SSB Relative Difference", x = "Year", color = "")+
+  scale_y_continuous(labels = scales::comma_format())+
+  scale_color_viridis(discrete = T) +
+  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  guides(fill = guide_legend(byrow = TRUE))
+plot_retrodiff10 <- ggplot(retrobio[retrobio$Yr >= 2013,], aes(x = Yr, y = Peel_diff, color = Peel))+
+  geom_line()+
+  labs(y = "", x = "Year", color = "")+
+  scale_y_continuous(labels = scales::comma_format())+
+  scale_x_continuous(breaks =c(2013, 2015, 2017, 2019, 2021, 2023))+
+  scale_color_viridis(discrete = T) +
+  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  guides(fill = guide_legend(byrow = TRUE))
+#Recruitment Plots
+plot_retrorec <- ggplot(retrorec, aes(x = Yr, y = Peel_rec/1000, color = Peel))+
+  geom_ribbon(aes(x = Yr, ymin = Peel_recLL/1000, ymax = Peel_recUL/1000, fill = Model), 
+              show.legend = F, fill = "grey70", alpha = 0.1, linetype = 0)+
+  geom_line()+
+  labs(y = "Recruits (1,000s t)", x = "", color = "")+
+  scale_y_continuous(labels = scales::comma_format())+
+  scale_color_viridis(discrete = T) +
+  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  guides(fill = guide_legend(byrow = TRUE))
+plot_retrorec10 <- ggplot(retrorec[retrorec$Yr >= 2013,], aes(x = Yr, y = Peel_rec/1000, color = Peel))+
+  geom_ribbon(aes(x = Yr, ymin = Peel_recLL/1000, ymax = Peel_recUL/1000, fill = Model), 
+              show.legend = F, fill = "grey70", alpha = 0.1, linetype = 0)+
+  geom_line()+
+  labs(y = "", x = "", color = "")+
+  scale_y_continuous(labels = scales::comma_format())+
+  scale_x_continuous(breaks =c(2013, 2015, 2017, 2019, 2021, 2023))+
+  scale_color_viridis(discrete = T) +
+  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  guides(fill = guide_legend(byrow = TRUE))
+plot_retrorecdiff <- ggplot(retrobio, aes(x = Yr, y = Peel_diff, color = Peel))+
+  geom_line()+
+  labs(y = "Recruitment Relative Difference", x = "Year", color = "")+
   scale_y_continuous(labels = scales::comma_format())+
   scale_color_viridis(discrete = T) +
   #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
@@ -339,19 +578,15 @@ plot_retrossb <- ggplot(retrobio, aes(x = Yr, y = Peel_SSB/1000, color = Peel))+
         legend.key = element_blank(),
         legend.spacing.y = unit(0.04, 'cm'))+
   guides(fill = guide_legend(byrow = TRUE))
-plot_retrodiff <- ggplot(retrobio, aes(x = Yr, y = Peel_diff, color = Peel))+
-  geom_line()+
-  labs(y = "Relative Difference", x = "Year", color = "")+
-  scale_y_continuous(labels = scales::comma_format())+
-  scale_color_viridis(discrete = T) +
-  #coord_cartesian(ylim = c(75, 350), xlim = c(1950, 2025))+
-  theme_bw()+
-  theme(legend.position = "none")+
-  guides(fill = guide_legend(byrow = TRUE))
 
-plot_retro <- plot_retrossb/plot_retrodiff
+plot_retro <- (plot_retrossb / plot_retrorec / plot_retrodiff) +
+  plot_layout(guides = "collect") & theme(legend.position = 'bottom')
+plot_retro10 <- ((plot_retrossb + plot_retrossb10) /
+                   (plot_retrorec + plot_retrorec10) /
+                   (plot_retrodiff + plot_retrodiff10)) +
+  plot_layout(guides = "collect") & theme(legend.position = 'bottom')
 ggsave(path = paste0(getwd(), "/", AYR, "/Tier3/Output"),
-       "Retrospecitve.png",plot=plot_retro,dpi=600,width = 6, height = 8)
+       "Retrospecitve10.png",plot=plot_retro10,dpi=600,width = 6, height = 8)
 
 # projection figure ----
 setwd("C:/Users/cindy.Tribuzio/Work/SAFE/Assessments/AFSC_BSAI_SKATE_Assessment")
@@ -364,8 +599,9 @@ projout <- read_csv(paste0(getwd(), "/", AYR, "/Tier3/Projections/prg_AKSK_14_2_
 B40 <- 71370
 B35 <- 62449
 
-plot_proj <- ggplot(projout, aes(x = Yr, y = SSB/1000, color = as.factor(Alternative)))+
+plot_proj <- ggplot(projout, aes(x = Yr, y = SSB/1000, color = as.factor(Alternative), shape = as.factor(Alternative)))+
   geom_line()+
+  geom_point()+
   geom_hline(yintercept = B40/1000, linetype = "dashed")+
   geom_hline(yintercept = B35/1000)+
   labs(y = "Spawning Biomass (1,000s t)", x = "Year", color = "")+

@@ -1,4 +1,4 @@
-datapath <- paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs")
+datapath <- paste0(getwd(), "/", AYR, "/Tier3/Model_Runs")
 
 # Current model name
 Model_name_old1 <- "M14_2_vold"
@@ -21,7 +21,7 @@ r4ss::SSplotComparisons(model_comp,
 
 
 #final model output----
-M14_2_out <- SSgetoutput( dir = paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs/M14_2_update"), verbose = TRUE)
+M14_2_out <- SSgetoutput(dir = paste0(getwd(), "/", AYR, "/Tier3/Model_Runs/M14_2_update"), verbose = TRUE)
 
 M14_2_SS <- SSsummarize(M14_2_out)
 
@@ -45,65 +45,8 @@ pars <- M14_2_SS$pars %>%
   bind_cols(M14_2_SS$parsSD$replist1) %>% 
   select(Parameter = Label, value = replist1, parSD = ...5)
 
-
-
-
-
 # input N and effN pulled directly from Report.SSO file, could use
 #M14_2_out$Length_comp_fit_summary
-
-# RMSE
-# from Olav's files for retros, can't find direct evidence of what he did for model fit
-#> x<-matrix(ncol=12,nrow= S_N)
-#> for(i in 1:12){
-#  +     x[1:( S_N -i),i]<-(log(SAB[1:( S_N -i),(14-i)])-log(SAB[1:( S_N -i),14]))^2
-#  +     }
-#> 
-#  > RMSE=sqrt(sum(x[!is.na(x)])/length(x[!is.na(x)]))
-#> RMSE
-#[1] 0.1799513
-
-#test Olav's way with old model data
-M14_2_OO <- SSgetoutput( dir = paste0(getwd(), "/Code/Tier3/", AYR, "/Model_Runs/M14_2_vold"), verbose = TRUE)
-
-M14_2_OOSS <- SSsummarize(M14_2_OO)
-
-bio_all_OO <- M14_2_OO$replist1$timeseries %>% 
-  select(Yr, Bio_all)
-surv_est_OO <- M14_2_OOSS$indices %>% 
-  select(Yr, Vuln_bio) %>% 
-  filter(Yr >= 1999)
-RMSE_OO <- surv_est_OO %>% 
-  left_join(bio_all_OO) %>% 
-  mutate(sqresid = (log(Vuln_bio)-log(Bio_all))^2) %>% 
-  select(sqresid)
-RMSE_OO <- sqrt(mean(RMSE_OO$sqresid))
-#still doesn't match exactly what was in last assessment, but closer
-corcoef_OO <- surv_est_OO %>% 
-  left_join(bio_all_OO) 
-corcoef_OO <- cor(corcoef_OO$Vuln_bio, corcoef_OO$Bio_all)
-
-
-# attempt to recreate Olav's methods with updated model data
-bio_all <- M14_2_out$replist1$timeseries %>% 
-  select(Yr, Bio_all)
-surv_est <- M14_2_SS$indices %>% 
-  select(Yr, Vuln_bio)
-RMSE <- surv_est %>% 
-  left_join(bio_all) %>% 
-  mutate(sqresid = (log(Vuln_bio)-log(Bio_all))^2) %>% 
-  select(sqresid)
-RMSE <- sqrt(mean(RMSE$sqresid))
-
-bio_out <- SSB %>% 
-  select(Yr = year, SSB, CV) %>% 
-  left_join(bio_all)
-write_csv(bio_out, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2biomass_summary.csv"))
-
-# Correlation Coeff
-corcoef <- surv_est %>%
-  left_join(bio_all) 
-corcoef <- cor(corcoef$Vuln_bio, corcoef$Bio_all)
 
 # some other summary information ----
 F_exploit <- M14_2_out$replist1$exploitation %>% 
@@ -123,4 +66,24 @@ write_csv(NAA, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2NAA_summary.csv"))
 
 Lcomp <- M14_2_out$replist1$len_comp_fit_table
 
-# Projection summaries ----
+# Survey fit summaries ----
+rmse <- M14_2_out[['replist1']]['index_variance_tuning_check'][['index_variance_tuning_check']]$RMSE
+
+surv_corr <- rcorr(M14_2_SS[["indices"]]$Obs, M14_2_SS[["indices"]]$Exp)
+
+mod_dat <- M14_2_out[["replist1"]][["timeseries"]] %>% 
+  select(Yr, Bio_all)
+
+#surv_dat <- read_csv(paste0(getwd(), "/Data/", AYR, "/RACE_biomass_skates", AYR, ".csv"))
+surv_limits <- M14_2_SS[["indices"]] %>% 
+  select(Yr, Obs, CV = SE, Exp) %>% 
+  mutate(obs_ul = Obs + 1.96*(CV*Obs),
+         obs_ll = Obs - 1.96*(CV*Obs)) %>% 
+  mutate(inrange = if_else(Exp <= obs_ul & Exp >= obs_ll, 1, 0))
+
+prop_cov <- surv_limits %>% 
+  group_by(inrange) %>% 
+  summarise(n = n())
+
+23/40
+  
