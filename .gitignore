@@ -17,6 +17,10 @@ database.csv
 # other species examples
 *ATF*
 *SHORTRAKER*
+*POP*
+*SPINY*
+*TURBOT*
+*Manual*
 
 # folders
 Data/
@@ -26,6 +30,7 @@ EXTRAS/
 Development_codes/
 Code/
 Images/
+AGP_Matta_data/
 
 # large files
 *RACE_CATCH*
@@ -35,16 +40,16 @@ Images/
 *trackoff*
 
 # Don't track data
-*.xlsx
+#*.xlsx
 *.xlsm
 *.docx
 *.pptx
 *.Rdata
 
 # Don't track binary or fig files
-*.docx
+#*.docx
 *.pptx
-*.pdf
+#*.pdf
 
 
 # ignore shape files
