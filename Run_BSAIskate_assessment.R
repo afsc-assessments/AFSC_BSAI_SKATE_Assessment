@@ -12,10 +12,10 @@ lapply(libs, library, character.only = TRUE)
 '%nin%'<-Negate('%in%') #this is a handy function
 
 # Create Directories ----
-SYR <- 2023 #survey year
-AYR <- 2023 #assessment year
-endyr <- 2023 #for rema model end year
-LAYR <- 2020 #last assessment year
+SYR <- 2024 #survey year
+AYR <- 2024 #assessment year
+endyr <- 2024 #for rema model end year
+LAYR <- 2022 #last assessment year
 
 dir.create(paste0(getwd(),"/Data/",AYR), showWarnings = T)
 dir.create(paste0(getwd(),"/Output/",AYR), showWarnings = T)
@@ -31,7 +31,7 @@ source(paste(getwd(),"/Code/Get_Data/AFSC_RACE_Biomass.R",sep=""))
 #source(paste(getwd(),"/Code/Get Data/Survey_Length_Frequency.R",sep=""))
 
 # AKRO CAS
-#source(paste(getwd(),"/Code/Get Data/AKRO_CAS_DATA.R",sep=""))
+source(paste(getwd(),"/Code/Get Data/CAS_OBS_catch.R",sep=""))
 
 # Tier 5 rema ----
 source(paste(getwd(),"/Code/Tier5/M20_0_rema.R",sep=""))

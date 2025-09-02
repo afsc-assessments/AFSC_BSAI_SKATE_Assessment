@@ -15,35 +15,35 @@ last_yr = this_year-1
 
 # catches for projection years ----
 ###  use last 5 years' real data average
-SS_catch <- read_csv(paste0(getwd(), "/Data/", this_year, "/BSAIsk_totcatch_", this_year, ".csv")) %>% 
-  filter(OBS_name == "ALASKA SKATE") %>% 
+SS_catch <- read_csv(paste0(getwd(), "/Data/", AYR, "/BSAIsk_totcatch_", AYR, ".csv")) %>% 
+  #filter(OBS_name == "ALASKA SKATE") %>% 
   group_by(YEAR) %>% 
   summarise(catch = sum(CATCH)) %>% 
   clean_names()
 
 ##  use last 5 years' real data average
 projc <- SS_catch %>% 
-  filter(year  < this_year & year  > (this_year-6)) %>% 
+  filter(year  < AYR & year  > (AYR-6)) %>% 
   group_by(year) %>% 
   summarise(catch = sum(catch)) %>% 
   summarise(mean(catch)) %>% as.numeric()
 
 catch_this_year <- SS_catch %>% 
-  filter(year == this_year) %>% 
+  filter(year == AYR) %>% 
   select(catch) %>% 
   as.numeric()
 
-yrs_spcat <- 2023:(this_year+2) ## years to infill catches
+yrs_spcat <- 2023:(AYR+2) ## years to infill catches
 catchvec <- data.frame('year' = yrs_spcat, 'catches' = NA) 
 ## fill in known catches (complete years)
-catchvec$catches[catchvec$year < this_year] <- 
-  SS_catch$catch[SS_catch$year < this_year & SS_catch$year %in% yrs_spcat]
+catchvec$catches[catchvec$year < AYR] <- 
+  SS_catch$catch[SS_catch$year < AYR & SS_catch$year %in% yrs_spcat]
 ## fill in estimated & projected catches
-catchvec$catches[catchvec$year == this_year] <- round(catch_this_year,0)
-catchvec$catches[catchvec$year > this_year] <- round(projc,0)
+catchvec$catches[catchvec$year == AYR] <- round(catch_this_year,0)
+catchvec$catches[catchvec$year > AYR] <- round(projc,0)
 catchvec <- as.data.frame(catchvec)
 
-save(catchvec, file = paste0(getwd(), "/Code/Tier3/", AYR, "/Projections/", Sys.Date(), "-catches_for_proj.rdata"))
+save(catchvec, file = paste0(getwd(), "/", AYR, "/Tier3/Projections/", Sys.Date(), "-catches_for_proj.rdata"))
 
 ####
 # test codes from other examples, not run----
@@ -122,19 +122,19 @@ shell('main')
 ## ## table in report.xlsx.
 
 rec_table1 <-
-  read.table(paste0(getwd(),'/percentdb.out')) %>%
+  read.table(paste0(getwd(),'/', AYR, '/Tier3/Projections/prg_AKSK_14_2_2023/percentdb.out')) %>%
   as.data.frame(stringsAsFactors=FALSE) %>%
   transmute(scenario=as.numeric(V2), year=as.numeric(V3), metric=V4,
             value=as.numeric(V5)) %>%
-  filter(year %in% (this_year+1:2) & scenario==1 &
+  filter(year %in% (AYR+1:2) & scenario==1 &
            metric %in% c('SSBMean','SSBFofl', 'SSBFabc', 'SSBF100', 'Fofl', 'Fabc')) %>%
   arrange(year, metric) %>%
   pivot_wider(names_from=year, values_from=value)
 rec_table1[3:6,3:4] <- rec_table1[3:6,3:4]
 
 rec_table2 <-
-  read.table(paste0(getwd(),'/alt2_proj.out'), header=TRUE) %>%
-  filter(Year %in% (this_year+1:2)) %>%
+  read.table(paste0(getwd(),'/', AYR, '/Tier3/Projections/prg_AKSK_14_2_2023/alt2_proj.out'), header=TRUE) %>%
+  filter(Year %in% (AYR+1:2)) %>%
   pivot_longer(cols=c(-Stock, -Year), names_to='metric', values_to='value') %>%
   pivot_wider(names_from=Year, values_from=value)
 rec_table1$scenario <- rec_table2$Stock <- NULL
@@ -145,7 +145,7 @@ rec_table <- bind_rows(rec_table1, rec_table2)
 rec_table <-rec_table[c(11,6,3,4,5,2,1,1,9,8,8),] 
 
 # rec_table[c(1:5,9:11),2:3] <-formatC(rec_table[c(1:5,9:11),2:3] , format="d", big.mark=",") 
-write_csv(rec_table, paste0(getwd(), '/rec_table.csv'))
+write_csv(rec_table, paste0(getwd(), '/', AYR, '/Tier3/Projections/prg_AKSK_14_2_2023/rec_table.csv'))
 
 ## load last year's values and make full safe
 previous_rec_table <- read_csv(paste0(getwd(),'/rec_table_old.csv'))

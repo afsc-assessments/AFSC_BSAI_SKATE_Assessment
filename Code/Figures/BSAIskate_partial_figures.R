@@ -1,135 +1,77 @@
-# Shark Assessment Maine Document Figures ----
-# Updated 10/24/2022 by C. Tribuzio
+# BSAI skate harvest projections document figs ----
+# Updated 8/22/2024 by C. Tribuzio
 
-# Setup ----
-datadir<-paste(getwd(),"/Data/Annual_updates/",AYR,sep="")
-cleandatdir<-paste(getwd(),"/Data/Cleaned/",AYR,sep="")
-figdir<-paste(getwd(),"/Output/",AYR,"/Figures/",sep="")
-dir.create(figdir, showWarnings = T)
-outdir <- paste0(getwd(),"/Output/",AYR)
-
-# ggplot themes
-theme_doc<- function(base_size = 12, base_family = "Helvetica") { #this function sets the theme for the whole figure
-  theme_bw(base_size = base_size, base_family = base_family) %+replace% #also note that this creates a bunch of font warnings that are not a real problem, I just haven't dealt with it yet
-    theme(
-      plot.title=element_text(size=20,colour='black',hjust = 0.5),
-      plot.background=element_blank(),
-      panel.grid.minor=element_blank(),
-      panel.grid.major=element_line(color="grey90"),
-      panel.border = element_blank(),
-      panel.background = element_blank(),
-      axis.line.x = element_line(colour='black'),
-      axis.line.y = element_line(colour='black'),
-      axis.text=element_text(size=12,colour='black'),
-      axis.ticks=element_line(colour='black'),
-      axis.title.y=element_text(colour='black',angle=90),
-      axis.title.x=element_text(colour='black'),
-      legend.background=element_blank(),
-      legend.text=element_text(colour='black',size=12),
-      legend.title=element_text(colour='black',size=12),
-      strip.background=element_blank(),
-      strip.text=element_text(size=20,colour='black')
-    )
-}
-
-# 18.1 Survey Biomass ----
-RACEdat <- read_csv(paste0(getwd(),"/Data/Annual_updates/",AYR,"/RACE_shelfNW_skate_biom.csv",sep="")) %>% 
+# 18.1 Tier 3 catch to biomass ratio----
+T3biodat <- read_csv(paste0(getwd(), '/', LAYR, "/Tier3/Output/M14_2dBioall_summary.csv"))
+T3catch <- read_csv(paste0(getwd(), '/', AYR, "/Tier_3/M14_2dSS3catch_updated.csv")) %>%  #file created by hand from data_aksk14_2_2023.ss and added updated 2023-2025 values
   clean_names()
 
-allspec <- ggplot(RACEdat, aes(x = year, y = stratum_biomass/1000, color = species_common_name, fill = species_common_name))+
-  geom_bar(stat = "identity")+
-  scale_fill_brewer(palette = "Set1", direction = -1, name = "Species")+
-  scale_color_brewer(palette = "Set1", direction = -1, name = "Species")+
-  scale_y_continuous(expand = c(0,0))+
-  labs(x = "", y = "")+
-  theme_doc()+
-  theme (legend.position = "none")
+# see Maia's code here for next time:
+# https://github.com/afsc-assessments/bsai-fhs/blob/main/2023/R/3_runProjections_makeFigsTables.R
 
-sansAK <- RACEdat %>% 
-  filter(species_common_name != "Alaska skate")
-noak <- ggplot(sansAK, aes(x = year, y = stratum_biomass/1000, color = species_common_name, fill = species_common_name))+
-  geom_bar(stat = "identity")+
-  scale_fill_brewer(palette = "Set1", direction = -1, name = "Species")+
-  scale_color_brewer(palette = "Set1", direction = -1, name = "Species")+
-  scale_y_continuous(expand = c(0,0))+
-  labs(x = "", y = "")+
-  theme_doc()+
-  theme (legend.position = "none")
+CBratio <- T3biodat %>% 
+  left_join(T3catch) %>% 
+  drop_na() %>% 
+  mutate(ratio = catch/Bio_all)
 
-biomleg <-ggplot(RACEdat, aes(x = year, y = stratum_biomass/1000, color = species_common_name, fill = species_common_name))+
-  geom_bar(stat = "identity")+
-  scale_fill_brewer(palette = "Set1", direction = -1, name = "Species")+
-  scale_color_brewer(palette = "Set1", direction = -1, name = "Species")+
-  scale_y_continuous(expand = c(0,0))+
-  labs(x = "", y = "")+
-  theme_doc()
-legend_doc = gtable_filter(ggplot_gtable(ggplot_build(biomleg)), "guide-box") 
-grid.draw(legend_doc)
+ggplot(CBratio, aes(x = year, y = ratio))+
+  geom_line()
 
-biom_fig <- grid.arrange(arrangeGrob(allspec, noak, nrow = 2,
-                                       bottom = textGrob("Year", vjust = -0.5,gp=gpar(col="black", fontsize=12)),
-                                       left = textGrob("Biomass (1000 t)", rot = 90, vjust = 1 ,gp=gpar(col="black", fontsize=12))), 
-                           legend_doc, widths=unit.c(unit(1, "npc") - legend_doc$width, legend_doc$width), 
-                           nrow=1)
-ggsave(path = figdir, "18.1_biomass.png",plot=biom_fig,dpi=600,width = 10, height = 11)
+ggplot(subset(CBratio), 
+       aes(x = year, y = ratio)) +
+  geom_line(lwd = 1, col = 'grey77') + 
+  geom_point(data = subset(CBratio, year > 2023),
+             lwd = 1,  col = 'blue', pch = 1) +
+  geom_point(data = subset(CBratio, year %in% c(2023)),
+             lwd = 1,  col = 'blue', pch = 16) +
+  scale_x_continuous(labels = seq(1950,2025,5), 
+                     breaks = seq(1950,2025,5))+
+  scale_y_continuous(limits = c(0,0.08),
+                     breaks = seq(0,0.08,0.01), 
+                     labels = seq(0,0.08,0.01))+
+  labs(x = 'Year', y = 'Catch/Summary Biomass (age 0+)')+
+  theme_bw()+
+  theme(panel.grid = element_blank())
+ggsave(last_plot(), height = 5, width = 8, dpi = 520,
+       file = paste0(getwd(), '/', AYR, '/Tier_3/BSAIskate_Fig18_1.png'))
+
+# 18.2 Tier 5 catch to biomass ratio----
+Osk_catch <- read_csv(paste0(getwd(), "/Data/", AYR, "/confidential_CAS_SKpart", AYR, ".csv")) %>% 
+  filter(NAMES != "ALASKA SKATE") %>% 
+  group_by(YEAR) %>% 
+  summarise(catch = sum(CATCH_WEIGHT)) %>% 
+  clean_names()
+Osk_rema <- read_csv(paste0(getwd(), '/', LAYR, "/Tier5/Output/Tier5_m20_output.csv")) %>% 
+  group_by(year) %>% 
+  summarise(Oskbiom = sum(pred))
+
+T5CB <- Osk_catch %>% 
+  left_join(Osk_rema) %>% 
+  mutate(ratio = catch/Oskbiom) %>% 
+  filter(year < AYR)
+
+ggplot(subset(T5CB), 
+       aes(x = year, y = ratio)) +
+  geom_line(lwd = 1, col = 'grey77') + 
+  scale_x_continuous(labels = seq(2000,2025,5), 
+                     breaks = seq(2000,2025,5))+
+  scale_y_continuous(limits = c(0,0.08),
+                     breaks = seq(0,0.08,0.01), 
+                     labels = seq(0,0.08,0.01))+
+  labs(x = 'Year', y = 'Catch/combined rema biomass')+
+  theme_bw()+
+  theme(panel.grid = element_blank())
+ggsave(last_plot(), height = 5, width = 8, dpi = 520,
+       file = paste0(getwd(), '/', AYR, '/Tier5/BSAIskate_Fig18_2.png'))
 
 
-# 18.2 harvets ratios----
-specdat <- read_csv(paste0(getwd(),"/Data/harvest_ratios.csv",sep="")) %>% 
-  clean_names() %>% 
-  mutate(catchABC = catch/abc,
-         catchbiom = catch/biomass)
-ratio_mean <- specdat %>% 
-  group_by(group) %>% 
-  summarise(LTmean = mean(catchbiom))
-curr_mean <- specdat %>% 
-  filter(year == AYR)
 
-cABC <- ggplot(specdat, aes(x = year, y = catchABC, color = group))+
-  geom_point(size = 4)+
-  geom_line()+
-  scale_fill_brewer(palette = "Dark2", name = "Group")+
-  scale_color_brewer(palette = "Dark2", name = "Group")+
-  labs(x = "", y = "Catch:ABC")+
-  scale_x_continuous(breaks=seq(2011,max(specdat$year),2))+
-  theme_doc()+
-  theme (legend.position = "none")
 
-cbiom <- ggplot(specdat, aes(x = year, y = catchbiom, color = group))+
-  geom_point(size = 4)+
-  geom_line()+
-  scale_fill_brewer(palette = "Dark2", name = "Group")+
-  scale_color_brewer(palette = "Dark2", name = "Group")+
-  geom_hline(aes(yintercept = 0.0389), color = "#1B9E77", linetype = "dashed")+
-  geom_hline(aes(yintercept = 0.0373), color = "#D95F02", linetype = "dashed")+
-  geom_hline(aes(yintercept = 0.0481), color = "#7570B3", linetype = "dashed")+
-  labs(x = "", y = "Catch:Biomass")+
-  scale_x_continuous(breaks=seq(2011,max(specdat$year),2))+
-  theme_doc()+
-  theme (legend.position = "none")
 
-ratioleg <- ggplot(specdat, aes(x = year, y = catchbiom, color = group))+
-  geom_point()+
-  geom_line()+
-  scale_fill_brewer(palette = "Dark2", name = "Group")+
-  scale_color_brewer(palette = "Dark2", name = "Group")+
-  geom_hline(aes(yintercept = 0.0389), color = "#1B9E77", linetype = "dashed")+
-  geom_hline(aes(yintercept = 0.0373), color = "#D95F02", linetype = "dashed")+
-  geom_hline(aes(yintercept = 0.0481), color = "#7570B3", linetype = "dashed")+
-  labs(x = "Year", y = "Catch:Biomass")+
-  scale_x_continuous(breaks=seq(2011,max(specdat$year),2))+
-  theme_doc()
-legend_doc = gtable_filter(ggplot_gtable(ggplot_build(ratioleg)), "guide-box") 
-grid.draw(legend_doc)
 
-ratio_fig <- grid.arrange(arrangeGrob(cABC, cbiom, nrow = 2,
-                                     bottom = textGrob("Year", vjust = -0.5,gp=gpar(col="black", fontsize=12))),
-                         legend_doc, widths=unit.c(unit(1, "npc") - legend_doc$width, legend_doc$width), 
-                         nrow=1)
-ggsave(path = figdir, "18.2_ratios.png",plot=ratio_fig,dpi=600,width = 10, height = 11)
 
-cBiom_fig <- grid.arrange(arrangeGrob(cbiom, nrow = 1,
-                                      bottom = textGrob("Year", vjust = -0.5,gp=gpar(col="black", fontsize=12))),
-                          legend_doc, widths=unit.c(unit(1, "npc") - legend_doc$width, legend_doc$width), 
-                          nrow=1)
-ggsave(path = figdir, "CBiomass_ratios.png",plot=cBiom_fig,dpi=600,width = 6, height = 5)
+
+
+
+
+

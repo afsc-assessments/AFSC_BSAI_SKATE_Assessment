@@ -283,7 +283,7 @@ write_csv(Species_m20_output, paste0(out_path, "/Appendix_SpeciesSpecific_rema_o
 
 # makes species specific summary plots----
 # make nice summary graph ----
-Species_m20_output <- read_csv(paste0(out_path, "/SpeciesSpecific_m20_output.csv")) %>% 
+Species_m20_output <- read_csv(paste0(out_path, "/Appendix_SpeciesSpecific_rema_output.csv")) %>% 
   mutate(Survey = if_else(model_name == 'M20_AIspec', "AI",
                           if_else(model_name == 'M20_EBSshelf_spec', "Shelf", "Slope")))
 
@@ -303,43 +303,40 @@ AIspec_plot <- ggplot(data = Species_m20_output[Species_m20_output$Survey == 'AI
   ggplot2::scale_fill_viridis_d(direction = 1) +
   ggplot2::scale_colour_viridis_d(direction = 1)
 
-ggsave(path = out_path, "Appendix_AIrema.png",plot=AIspec_plot,dpi=600,width = 10, height = 11)
+ggsave(path = out_path, "Appendix_AIrema.png",plot=AIspec_plot,dpi=600,width = 6, height = 8)
 
+bcolors <- viridis(n=3)
 Shelfspec_plot <- ggplot(data = Species_m20_output[Species_m20_output$Survey == 'Shelf',],
                       aes(x = year, y = pred,
                           col = model_name)) +
   geom_ribbon(aes(ymin = pred_lci, ymax = pred_uci,
                   fill = model_name), col = NA,
-              alpha = 0.25, show.legend = F) +
-  geom_line(show.legend = F) +
+              fill = bcolors[2], alpha = 0.25, show.legend = F) +
+  geom_line(show.legend = F, col = bcolors[2]) +
   facet_grid(strata~Survey, scales = "free") +
   geom_point(aes(x = year, y = obs), col = "black") +
   geom_errorbar(aes(x = year, ymin = obs_lci, ymax = obs_uci), col = "black") +
   scale_y_continuous(labels = scales::comma, expand = c(0.01, 0), limits = c(0, NA)) +
   labs(x = "", y = 'Biomass (t)',
-       fill = NULL, colour = NULL, shape = NULL) +
-  ggplot2::scale_fill_viridis_d(direction = 1) +
-  ggplot2::scale_colour_viridis_d(direction = 1)
+       fill = NULL, colour = NULL, shape = NULL)
 
-ggsave(path = out_path, "Appendix_EBSshelfrema.png",plot=Shelfspec_plot,dpi=600,width = 10, height = 11)
+ggsave(path = out_path, "Appendix_EBSshelfrema.png",plot=Shelfspec_plot,dpi=600,width = 6, height = 8)
 
 Slopespec_plot <- ggplot(data = Species_m20_output[Species_m20_output$Survey == 'Slope',],
                          aes(x = year, y = pred,
                              col = model_name)) +
   geom_ribbon(aes(ymin = pred_lci, ymax = pred_uci,
                   fill = model_name), col = NA,
-              alpha = 0.25, show.legend = F) +
-  geom_line(show.legend = F) +
+              fill = bcolors[3], alpha = 0.25, show.legend = F) +
+  geom_line(show.legend = F, col = bcolors[3]) +
   facet_grid(strata~Survey, scales = "free") +
   geom_point(aes(x = year, y = obs), col = "black") +
   geom_errorbar(aes(x = year, ymin = obs_lci, ymax = obs_uci), col = "black") +
   scale_y_continuous(labels = scales::comma, expand = c(0.01, 0), limits = c(0, NA)) +
   labs(x = "", y = 'Biomass (t)',
-       fill = NULL, colour = NULL, shape = NULL) +
-  ggplot2::scale_fill_viridis_d(direction = 1) +
-  ggplot2::scale_colour_viridis_d(direction = 1)
+       fill = NULL, colour = NULL, shape = NULL)
 
-ggsave(path = out_path, "Appendix_EBSsloperema.png",plot=Slopespec_plot,dpi=600,width = 10, height = 11)
+ggsave(path = out_path, "Appendix_EBSsloperema.png",plot=Slopespec_plot,dpi=600,width = 6, height = 8)
 
 # Northern Bering Sea Survey----
 NBS_dat <- read_csv(paste0(dat_path, '/RACE_biomass_NBSskates', SYR, ".csv")) %>% 
@@ -371,21 +368,20 @@ m20_NBS_tot <- tidy_rema(m20_NBS)$biomass_by_strata %>%
   select(strata, model_name, strata, year, variable, pred, pred_lci, pred_uci, obs, obs_cv, obs_lci, obs_uci) 
 write_csv(m20_NBS_tot, paste0(out_path, "/NBS_AKskate_rema_output.csv"))
 
+bcolors <- viridis(n=5)
 NBS_plot <- ggplot(data = m20_NBS_tot,
                          aes(x = year, y = pred,
                              col = model_name)) +
   geom_ribbon(aes(ymin = pred_lci, ymax = pred_uci,
                   fill = model_name), col = NA,
-              alpha = 0.25, show.legend = F) +
-  geom_line(show.legend = F) +
+              fill = bcolors[2], alpha = 0.25, show.legend = F) +
+  geom_line(show.legend = F, col = bcolors[2]) +
   facet_grid(~strata, scales = "free") +
   geom_point(aes(x = year, y = obs), col = "black") +
   geom_errorbar(aes(x = year, ymin = obs_lci, ymax = obs_uci), col = "black") +
   scale_y_continuous(labels = scales::comma, expand = c(0.01, 0), limits = c(0, NA)) +
   labs(x = "", y = 'Biomass (t)',
-       fill = NULL, colour = NULL, shape = NULL) +
-  ggplot2::scale_fill_viridis_d(direction = 1) +
-  ggplot2::scale_colour_viridis_d(direction = 1)
+       fill = NULL, colour = NULL, shape = NULL)
 
 ggsave(path = out_path, "Appendix_NBS_AKskate_rema.png",plot=NBS_plot,dpi=600,width = 10, height = 5)
 

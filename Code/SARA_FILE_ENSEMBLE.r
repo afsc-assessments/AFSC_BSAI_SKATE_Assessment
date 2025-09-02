@@ -111,8 +111,8 @@ F_ap<-do.call(rbind,F_ap)
 recr<-do.call(rbind,recr)
 F_MSY<-do.call(rbind,F_MSY)
 
-minb<-sum(minb)
-maxb<-sum(maxb)
+minb<-sum(minb)/2
+maxb<-sum(maxb)/2
 ssb_unfished<-sum(ssb_unfished)
 recr<-colSums(recr)
 F_ap<-colSums(F_ap)
@@ -274,8 +274,8 @@ F_MSY<-sum(F_MSY)
 
  #WT=c(0.2842,0.3158,0.2316,0.1684) 
  WT=c(1.00)
- mods<-c("3_2withSlopeMnSAA")
- mods_nam<-c("Model 16.4c")
+ mods<-c("M14_2d_fixedcatch")
+ mods_nam<-c("Model 14.2d")
 
     ## STOCK - identifier key for joining SARA data, see lookup table for key code:
     ## STOCK_NAME  -  Enter Stock Name:  (e.g. "'EBS Pacific cod'"")
@@ -293,8 +293,8 @@ F_MSY<-sum(F_MSY)
     ## see example below...
 
 
-GET_SARA_ENSEMBLE(dir=getwd(),models=mods,nam_mod=mods_nam,WEIGHT=WT,
-	email="'meaghan.bryan@noaa.gov'",Enter_Data=FALSE,STOCK="BSAI GREENLAND TURBOT",STOCK_NAME="'Greenland turbot'",
+GET_SARA_ENSEMBLE(dir= paste0(getwd(), "/", AYR, "/Tier3/Model_Runs"),models=mods,nam_mod=mods_nam,WEIGHT=WT,
+	email="'cindy.tribuzio@noaa.gov'",Enter_Data=FALSE,STOCK="AKSKATE",STOCK_NAME="'Alaska skate - Bering Sea / Aleutian Islands'",
 	REGION="'BSAI'",TIER="'3a'",UPDATE="'benchmark'",COMPLEX="'NA'",CID=5,AID=3,BID=3,SCID=3,EL=2,MFR=1000,F_LIMIT=0.284, F_MSY_PROJ=0.20,
-	SURV_DESC=c('EBS Shelf Bottom trawl survey','EBS Slope Bottom trawl survey','AFSC longline survey'),
-	NOTES="'2022 accepted model.'",stryr=1945,SS3_proj=FALSE)
+	SURV_DESC=c('EBS Shelf Bottom trawl survey'),
+	NOTES="'2023 accepted model.'",stryr=1950,SS3_proj=FALSE)

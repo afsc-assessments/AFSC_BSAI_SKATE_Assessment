@@ -21,6 +21,58 @@ dir.create(rawpath)
 specs <- read_csv(paste0(getwd(), "/Data/BSAIskate_species_codes.csv")) %>% 
   rename(species_code = RACE_code)
 
+# new GAP products query, this is just hand if needed to check on cruise info
+GAP_cruise <- sqlQuery(channel_akfin, query = ("
+                select    *
+                from      gap_products.akfin_cruise")) %>% 
+  clean_names() %>% 
+  filter(survey_name %in% c("Eastern Bering Sea Crab/Groundfish Bottom Trawl Survey", "Aleutian Islands Bottom Trawl Survey",
+                            "Eastern Bering Sea Slope Bottom Trawl Survey"))
+
+# survey_definition_IDs 52 = AI, 98 = EBS and 78 = slope
+# area_ID is the stratum, the '999' is the total for the survey, 01 = EBS, 04 = AI, 05 = slope
+AFSCTWL_Bio <- sqlQuery(channel_akfin, query = ("
+                select    *
+                from      gap_products.akfin_biomass
+                where     species_code between 400 and 500 and
+                          survey_definition_id IN (52, 78, 98) and 
+                          year > 1990 and
+                          area_ID in (99901, 99904, 99905)")) %>% 
+  clean_names() %>% 
+  filter(species_code %nin% c(403, 404)) # 403 = egg cases, 404 = generic Raja group, almost no use, none since 1998
+
+# Clean up and add CIs and CVs ----
+AFSCTWL_Bio <- AFSCTWL_Bio %>% 
+  mutate(cv = sqrt(biomass_var)/biomass_mt,
+         se = sqrt(biomass_var),
+         bio_ll = biomass_mt - 1.96*se,
+         bio_ul = biomass_mt + 1.96*se) %>% 
+  replace(is.na(.), 0) %>% 
+  rename(survey = survey_definition_id,
+         biomass = biomass_mt)
+
+# data check for new species, should result in zero rows
+new_spec <- AFSCTWL_Bio %>% 
+  left_join(specs) %>% 
+  group_by(species_code, RACE_name, BSAI_spec, EBS_Tier, AI_Tier, Shelf_Group, Slope_Group, AI_Group) %>% 
+  summarise(n_yrs = length(biomass)) %>% 
+  filter(is.na(BSAI_spec))
+if(nrow(new_spec) > 0) warning("Check for new species")
+# checking what's up with new species
+#ugh <- AFSCTWL_Bio %>% 
+#  filter(species_code %in% c(404))
+
+# final biomass table
+AFSCTWL_BIOM <- AFSCTWL_Bio %>% 
+  left_join(specs) %>% 
+  filter(BSAI_spec == "Y")
+
+write_csv(AFSCTWL_BIOM, paste0(rawpath, "/RACE_biomass_skates", SYR, ".csv")) 
+
+
+
+
+# OLD CODE PRE GAP PRODUCTS
 # Haul data, will need this to put length data into areas? Will not need it for RFX if we go with REMA
 #AFSCTWL_HAULGOA <- sqlQuery(channel_akfin, query = ("
 #                select    *

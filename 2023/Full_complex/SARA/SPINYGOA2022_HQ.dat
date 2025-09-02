@@ -1,0 +1,117 @@
+#Stock Assessment Results Archive (SARA) file for stocks managed under the North Pacific Fisheries Management Council
+#This form is only required for Tier 1-6 stocks in a full year, or Tier 1-3 stocks in a partial year 
+#There are four required sections to update: Assessment Summary, Fishing Mortality Estimates, Biomass Estimates, and Time Series Estimates with an optional fifth Survey Estimates section 
+#Please fill in the text (surrounded by " ") or data as values in the line after each field marked with a # and capitalized name (e.g., #STOCK, the next line should be "ATF") 
+#Note that several of the fields below may be static or only change occasionally, please see the SARA_HQ_Lookup Google sheet for more details
+#ASSESSMENT_SUMMARY -------------------------------------------------------------------------------------------------
+#STOCK
+"SPINY"
+#STOCK_NAME
+"North Pacific spiny dogfish - Gulf of Alaska"
+#REGION
+"GOA"
+#ASMT_TYPE
+"Operational"
+#ASMT_YEAR
+2022
+#ASMT_MONTH
+"Dec"
+#TIER
+"5"
+#NUM_SEXES
+"NA"         
+#NUM_FISHERIES
+1
+#REC_MULT
+"NA"
+#RECAGE
+"NA"       
+#COMPLEX
+"NA"
+#LAST_DATA_YEAR
+2022
+#ASMT_MODEL_CATEGORY
+"2 - Index-Based"
+#ASMT_MODEL
+"Index Method"
+#MODEL_VERSION
+"15.3a"
+#ENSEMBLE
+"NA"
+#LEAD_LAB
+"AFSC"
+#POC_EMAIL
+"cindy.tribuzio@noaa.gov"
+#REVIEW_RESULT
+"Full acceptance"
+#CATCH_INPUT_DATA
+3
+#ABUNDANCE_INPUT_DATA
+3
+#BIOLOGICAL_INPUT_DATA
+2
+#SIZEAGE_COMP_INPUT_DATA
+2
+#ECOSYSTEM_LINKAGE
+0
+#FISHING_MORTALITY_ESTIMATES ----------------------------------------------------------------------------------------
+#F_YEAR
+2021
+#F_BASIS
+"Catch/Biomass"
+#F_UNIT
+"Exploitation Rate"
+#BEST_F_ESTIMATE
+0.01
+#F_LIMIT
+0.04
+#F_LIMIT_BASIS
+"Fmax based on demographic analyses"
+#F_MSY
+0.04
+#F_MSY_BASIS
+"FMSY = Fmax from demographic analyses"
+#BIOMASS_ESTIMATES --------------------------------------------------------------------------------------------------
+#B_YEAR
+2021
+#B_BASIS
+"Survey-Estimated Biomass"
+#B_UNIT
+"Metric Tons"
+#BEST_B_ESTIMATE
+148776
+#LOWER_B_ESTIMATE
+"NA"
+#UPPER_B_ESTIMATE
+"NA"
+#ESTIMATE_METHOD
+"NA"
+#INTERVAL_SIZE
+"NA"
+#B_MSY
+"NA"
+#B_MSY_BASIS
+"NA"
+#TIME_SERIES_ESTIMATES ----------------------------------------------------------------------------------------------
+#FISHERYYEAR
+1990	1991	1992	1993	1994	1995	1996	1997	1998	1999	2000	2001	2002	2003	2004	2005	2006	2007	2008	2009	2010	2011	2012	2013	2014	2015	2016	2017	2018	2019	2020	2021	2022
+#AGE
+"NA"	
+#RECRUITMENT
+"NA"
+#SPAWNBIOMASS
+"NA"
+#TOTALBIOMASS
+14014	16073	20749	30103	28362	26902	25668	26112	28145	32612	42171	54688	67714	83898	65862	53591	72143	98285	53746	30029	36038	43318	63104	95098	71375	55390	51933	49765	34323	23830	26861	31243	NA
+#TOTFSHRYMORT
+"NA"
+#TOTALCATCH
+NA	NA	NA	NA	NA	NA	1040	2388	1036	1117	853	427	715	544	1054	1557	1337	617	1741	716	523	701	2156	1582	1389	1951	1772	3410	1989	1358	1917	1550
+#SURVEYDESC
+"Gulf of Alaska Shelf and Slope Groundfish Bottom Trawl"
+#STOCKNOTES
+"SAFE report indicates that this stock was not subjected to overfishing in 2021."
+#SURVEY_ESTIMATES [OPTIONAL] ------------------------------------------------------------------------------------------
+#
+#"Gulf of Alaska Shelf and Slope Groundfish Bottom Trawl"
+18947	NA	NA	33645	NA	NA	28478	NA	NA	31743	NA	31774	NA	98744	NA	47939	NA	162759	NA	27880	NA	41093	NA	160384	NA	51916	NA	53978	NA	22014	NA	32319	NA

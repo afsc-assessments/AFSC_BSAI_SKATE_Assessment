@@ -115,8 +115,10 @@ RACE_dat <- read_csv(paste0(dat_path, '/RACE_biomass_skates', SYR, ".csv")) %>%
 
 # need to make combined other biomass with CIs
 AKshelf <- RACE_dat %>% 
-  filter(survey == "EBS_SHELF" & RACE_name == 'Alaska skate') %>% 
-  select(year, survey, biomass, bio_ll, bio_ul)
+  filter(survey == 98 & species_code == 471) %>% 
+  select(year, survey, biomass, bio_ll, bio_ul) %>% 
+  mutate(Species = "Alaska Skate",
+         survey = "Shelf")
 plot_AKshelf <- ggplot(AKshelf, aes(x = year, y = biomass/1000, fill = survey, color = survey))+
   geom_point()+
   geom_line()+
@@ -129,14 +131,18 @@ plot_AKshelf <- ggplot(AKshelf, aes(x = year, y = biomass/1000, fill = survey, c
   theme(legend.position = "none")
 
 Other <- RACE_dat %>% 
-  filter(!(survey == "EBS_SHELF" & RACE_name == 'Alaska skate')) %>% 
+  filter(!(survey == 98 & species_code == 471))
+Other <- Other %>% 
+  filter(!(year == 1999 & species_code == 405)) %>% # added this because there is a wonky 405 on 1999 in the new gap products
   group_by(year, survey) %>% 
   summarise(biomass = sum(biomass), biomass_var = sum(biomass_var)) %>% 
   mutate(cv = sqrt(biomass_var)/biomass,
          se = sqrt(biomass_var),
          bio_ll = biomass - 1.96*se,
          bio_ul = biomass + 1.96*se,
-         Species = 'Other Skates') %>% 
+         Species = 'Other Skates',
+         survey = if_else(survey == 98, "Shelf",
+                          if_else(survey == 52, "AI", "Slope"))) %>% 
   select(year, survey, biomass, bio_ll, bio_ul, Species)
 sk_biom <- AKshelf %>% 
   bind_rows(Other)

@@ -2,7 +2,7 @@
 
 datapath <- paste0(getwd(), "/Data/", AYR)
 
-CAS_dat <- read_csv(paste0(datapath, "/confidential_CAS_skates", AYR, ".csv"))
+CAS_dat <- read_csv(paste0(datapath, "/confidential_CAS_skates_Nov8", AYR, ".csv"))
 
 # BSAI total discards ----
 BSAI_tot <- CAS_dat %>% 
@@ -24,8 +24,8 @@ fsub_tot <- CAS_dat %>%
 
 # gear discards ----
 gear_tot <- CAS_dat %>% 
-  filter(FMP_GEAR %in% c('HAL', 'TRW')) %>% 
-  group_by(Year = YEAR, RETAINED_OR_DISCARDED, FMP_GEAR) %>% 
+  filter(AGENCY_GEAR_CODE %in% c('HAL', 'TRW')) %>% 
+  group_by(YEAR, RETAINED_OR_DISCARDED, FMP_GEAR) %>% 
   summarise(catch = sum(WEIGHT_POSTED)) %>% 
   pivot_wider(names_from = RETAINED_OR_DISCARDED, values_from = catch) %>% 
   mutate(tot_catch = sum(R, D, na.rm = T),
@@ -36,16 +36,16 @@ gear_tot <- CAS_dat %>%
 # gear and fmp_sub area discards ----
 fsubgear_tot <- CAS_dat %>% 
   filter(FMP_GEAR %in% c('HAL', 'TRW')) %>% 
-  group_by(Year = YEAR, RETAINED_OR_DISCARDED, FMP_GEAR, FMP_SUBAREA) %>% 
+  group_by(YEAR, RETAINED_OR_DISCARDED, FMP_GEAR, FMP_SUBAREA) %>% 
   summarise(catch = sum(WEIGHT_POSTED)) %>% 
   pivot_wider(names_from = RETAINED_OR_DISCARDED, values_from = catch) %>% 
-  mutate(tot_catch = sum(R, D, na.rm = T),
+  mutate(tot_catch = D+R,
          Dprop = D/tot_catch) %>% 
-  select(Year, FMP_GEAR, FMP_SUBAREA, Dprop) %>% 
+  select(YEAR, FMP_GEAR, FMP_SUBAREA, Dprop) %>% 
   pivot_wider(names_from = FMP_GEAR, values_from = Dprop)
 
 
-ggplot(fsubgear_tot, aes(x = Year, y = Dprop, shape = FMP_SUBAREA, color = FMP_GEAR))+
+ggplot(fsubgear_tot, aes(x = YEAR, y = Dprop, shape = FMP_SUBAREA, color = FMP_GEAR))+
   geom_line()+
   facet_grid(.~FMP_SUBAREA)
 

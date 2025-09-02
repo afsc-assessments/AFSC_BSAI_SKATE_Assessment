@@ -1,16 +1,16 @@
 datapath <- paste0(getwd(), "/", AYR, "/Tier3/Model_Runs")
 
 # Current model name
-Model_name_old1 <- "M14_2_vold"
-Model_name_old2 <- "M14_2_vbridge"
-Model_name_fixdat <- "M14_2_fix_old"
-Model_name_adddat <- "M14_2_addnew"
-Model_name_new <- "M14_2_update"
+#Model_name_old1 <- "M14_2_vold"
+#Model_name_old2 <- "M14_2_vbridge"
+#Model_name_fixdat <- "M14_2_fix_old"
+#Model_name_adddat <- "M14_2_addnew"
+#Model_name_new <- "M14_2_update"
 
 # compare bridging models----
 # read model outputs
 setwd(datapath)
-bridge_out <- SSgetoutput(dirvec = c("M14_2_vold","M14_2_vbridge", "M14_2_fix_old", 'M14_2_addnew', 'M14_2_update'))
+bridge_out <- SSgetoutput(dirvec = c("M14_2_update","M14_2d_fixedcatch"))
 setwd("C:/Users/cindy.Tribuzio/Work/SAFE/Assessments/AFSC_BSAI_SKATE_Assessment")
 
 model_comp <- r4ss::SSsummarize(bridge_out)
@@ -34,13 +34,17 @@ SSB <- M14_2_SS$SpawnBio %>%
   bind_cols(M14_2_SS$SpawnBioLower$replist1, M14_2_SS$SpawnBioUpper$replist1, M14_2_SS$SpawnBioSD$replist1) %>% 
   select(year = Yr, SSB = replist1, SSBLL = ...4, SSBUL = ...5, SSBSD = ...6) %>% 
   mutate(CV = SSBSD/SSB)
+write_csv(SSB, paste0(getwd(), "/", AYR, "/Tier3/Output/M14_2dSSB_summary.csv"))
 
+TotBiom <- M14_2_out$replist1$timeseries %>% 
+  select(year = Yr, Bio_all)
+write_csv(TotBiom, paste0(getwd(), "/", AYR, "/Tier3/Output/M14_2dBioall_summary.csv"))
 
 recruit <- M14_2_SS$recruits %>% 
   bind_cols(M14_2_SS$recruitsLower$replist1, M14_2_SS$recruitsUpper$replist1, M14_2_SS$recruitsSD$replist1) %>% 
   select(year = Yr, rec = replist1, recLL = ...4, recUL = ...5, recSD = ...6) %>% 
   mutate(CV = recSD/rec)
-write_csv(recruit, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2recruit_summary.csv"))
+write_csv(recruit, paste0(getwd(), "/", AYR, "/Tier3/Output/M14_2drecruit_summary.csv"))
 
 pars <- M14_2_SS$pars %>% 
   bind_cols(M14_2_SS$parsSD$replist1) %>% 
@@ -55,7 +59,7 @@ F_exploit <- M14_2_out$replist1$exploitation %>%
          Trawl = round(TWL, 3),
          Total_F = round(annual_F, 3)) %>% 
   select(Yr, Longline, Trawl, Total_F)
-write_csv(F_exploit, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2exploitation_summary.csv"))
+write_csv(F_exploit, paste0(getwd(), "/", AYR, "/Tier3/Output/M14_2dexploitation_summary.csv"))
 
 NAA <- M14_2_out$replist1$natage %>% 
   filter(`Beg/Mid` == "B") %>% 
@@ -63,7 +67,7 @@ NAA <- M14_2_out$replist1$natage %>%
   pivot_longer(!Yr, names_to = "Age", values_to = "Numbers") %>% 
   mutate(Numbers = round(Numbers, 0)) %>% 
   pivot_wider(names_from = Age, values_from = Numbers)
-write_csv(NAA, paste0(getwd(), "/Output/", AYR, "/Tier3/M14_2NAA_summary.csv"))
+write_csv(NAA, paste0(getwd(), "/", AYR, "/Tier3/Output/M14_2dNAA_summary.csv"))
 
 Lcomp <- M14_2_out$replist1$len_comp_fit_table
 

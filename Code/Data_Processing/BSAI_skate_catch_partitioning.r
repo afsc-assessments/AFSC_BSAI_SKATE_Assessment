@@ -4,17 +4,23 @@
   require(rgdal)
   require(dplyr)
   require(lubridate)
-  require(swo)
+  #require(swo)
   require(vcdExtra)
   require(misty)
+  library(readr)
 
 
   datapath<-paste(getwd(),"/Data/",AYR,sep="")
   
 # Get CAS and NORPAC data ----
 # also standardizes names
-OBS <- read_csv(paste0(getwd(),"/Data/", AYR, "/confidential_NORPAC_skates2023.csv"))
-CAS <- read_csv(paste0(getwd(),"/Data/", AYR, "/confidential_CAS_skates2023.csv"))
+OBS <- read_csv(paste0(getwd(),"/Data/", AYR, "/confidential_NORPAC_skates", AYR, ".csv"))
+CAS <- read_csv(paste0(getwd(),"/Data/", AYR, "/confidential_CAS_skates", AYR, ".csv")) %>% 
+  mutate(cmonth = month(WEEK_END_DATE),
+         status = if_else(cmonth >= 10 & YEAR == AYR, "Y", "N")) %>% 
+  filter(status == "N") %>% 
+  rename(HARVEST_SECTOR = GF_HARVEST_SECTOR)
+
 OBS<-as.data.table(OBS)
 CAS<-as.data.table(CAS)
 ## standardizing names for both data sets
@@ -73,7 +79,6 @@ OBS_CP_PROP$PROP<-OBS_CP_PROP$WEIGHT/OBS_CP_PROP$TOTAL
 CAS_CP_AS<-CAS_CP[NAMES!="COMBINED SKATE"][,list(CATCH_WEIGHT=sum(WEIGHT_POSTED)),by=c("YEAR","NMFS_AREA","CV_STRATUM","AGENCY_GEAR_CODE","NAMES")]
 CAS_CP_OS<-CAS_CP[NAMES=="COMBINED SKATE"][,list(CATCH_WEIGHT=sum(WEIGHT_POSTED)),by=c("YEAR","NMFS_AREA","CV_STRATUM","AGENCY_GEAR_CODE")]
 MERGE_CP_OBS_CAS<-merge(CAS_CP_OS,OBS_CP_PROP,all.x=T,by=c("YEAR","NMFS_AREA","CV_STRATUM","AGENCY_GEAR_CODE"))
-
 
 ## fill those catch from areas without observer data using CV_stratum
 OBS_CP_PROP2<-OBS_CP[,list(WEIGHT=sum(EXTRAPOLATED_WEIGHT)),by=c("YEAR","CV_STRATUM","AGENCY_GEAR_CODE","NAMES")]

@@ -1,0 +1,116 @@
+#Stock Assessment Results Archive (SARA) file for stocks managed under the North Pacific Fisheries Management Council
+#This form is only required for Tier 1-6 stocks in a full year, or Tier 1-3 stocks in a partial year 
+#There are four required sections to update: Assessment Summary, Fishing Mortality Estimates, Biomass Estimates, and Time Series Estimates with an optional fifth Survey Estimates section 
+#Please fill in the text (surrounded by " ") or data as values in the line after each field marked with a # and capitalized name (e.g., #STOCK, the next line should be "ATF") 
+#Note that several of the fields below may be static or only change occasionally, please see the SARA_HQ_Lookup Google sheet for more details
+#ASSESSMENT_SUMMARY -------------------------------------------------------------------------------------------------
+#STOCK
+" "
+#STOCK_NAME
+" "
+#REGION
+" "
+#ASMT_TYPE
+" "
+#ASMT_YEAR
+ 
+#ASMT_MONTH
+" "
+#TIER
+" "
+#NUM_SEXES
+           
+#NUM_FISHERIES
+ 
+#REC_MULT
+ 
+#RECAGE
+        
+#COMPLEX
+" "
+#LAST_DATA_YEAR
+
+#ASMT_MODEL_CATEGORY
+" "
+#ASMT_MODEL
+" "
+#MODEL_VERSION
+" "
+#ENSEMBLE 
+" "
+#LEAD_LAB
+" "
+#POC_EMAIL
+" "
+#REVIEW_RESULT
+" "
+#CATCH_INPUT_DATA
+
+#ABUNDANCE_INPUT_DATA
+
+#BIOLOGICAL_INPUT_DATA
+
+#SIZEAGE_COMP_INPUT_DATA
+
+#ECOSYSTEM_LINKAGE
+
+#FISHING_MORTALITY_ESTIMATES ----------------------------------------------------------------------------------------
+#F_YEAR
+
+#F_BASIS
+" "
+#F_UNIT
+" "
+#BEST_F_ESTIMATE
+
+#F_LIMIT
+
+#F_LIMIT_BASIS
+" "
+#F_MSY
+
+#F_MSY_BASIS
+" "
+#BIOMASS_ESTIMATES --------------------------------------------------------------------------------------------------
+#B_YEAR
+
+#B_BASIS
+" "
+#B_UNIT
+" "
+#BEST_B_ESTIMATE
+
+#LOWER_B_ESTIMATE
+
+#UPPER_B_ESTIMATE
+
+#ESTIMATE_METHOD
+" "
+#INTERVAL_SIZE
+
+#B_MSY
+
+#B_MSY_BASIS
+" "
+#TIME_SERIES_ESTIMATES ----------------------------------------------------------------------------------------------
+#FISHERYYEAR
+
+#AGE
+
+#RECRUITMENT
+
+#SPAWNBIOMASS
+
+#TOTALBIOMASS
+
+#TOTFSHRYMORT
+
+#TOTALCATCH
+
+#SURVEYDESC
+" "
+#STOCKNOTES
+" "
+#SURVEY_ESTIMATES [OPTIONAL] ------------------------------------------------------------------------------------------
+#" " 
+ 
