@@ -11,6 +11,9 @@ database.csv
 # confidential fishery dependent data
 *confidential*
 
+# ignore draft documents
+*draft*
+
 # old assessment archive
 *archive*
 
