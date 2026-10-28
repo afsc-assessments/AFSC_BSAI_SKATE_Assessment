@@ -1,0 +1,19 @@
+$par
+[1] 1943.1559111 1961.9458656 2025.0641332 2026.0547910    0.2313207
+
+$objective
+[1] 3.179373
+
+$convergence
+[1] 0
+
+$iterations
+[1] 81
+
+$evaluations
+function gradient 
+     130      547 
+
+$message
+[1] "relative convergence (4)"
+
